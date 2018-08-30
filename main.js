@@ -8,9 +8,7 @@ const DEFAULT_FONT_SIZE = 16;
 class AdjustText extends React.Component {
   constructor(props) {
     super(props);
-    var x = this.props.x || 100;
-    var y = this.props.y || 100;
-    this.state = { x: x, y: y };
+    this.state = {};
     this.set_text(this.props.text);
   }
 
@@ -21,12 +19,12 @@ class AdjustText extends React.Component {
    * @suppress {checkTypes}
    */
   get_content_extent(content) {
-    var t = content; //.replace("\n", "<br/>");
+    var t = content.replace("\n", "<br/>");
     var a = $("<span>" + t + "</span>")
-    .css("font-family", "arial")
-    .css("font-size", DEFAULT_FONT_SIZE + "px")
-    .css("display", "none")
-    .appendTo("body");
+      .css("font-family", "arial")
+      .css("font-size", DEFAULT_FONT_SIZE + "px")
+      .css("display", "none")
+      .appendTo("body");
     var r = { x: a.width(), y: a.height() };
     a.remove();
 
@@ -119,20 +117,21 @@ class AdjustText extends React.Component {
   }
 
   render() {
-    var x = parseFloat(this.state.x);
-    var y = parseFloat(this.state.y);
+    var x = this.props.x;
+    var y = this.props.y;
     var text_x = x + 65;
+    var text_y = y + 50;
     var lines = this.render_lines(text_x);
     var font = this.state.fontsize + "px arial";
     return (
       <text
         x={text_x}
-        y={y + 50}
+        y={text_y}
         textAnchor="middle"
         fontSize={this.state.fontsize}
         stroke="none"
         fill="#000000"
-        >
+      >
         {lines}
       </text>
     );
@@ -142,26 +141,51 @@ class AdjustText extends React.Component {
 class Fusen extends React.Component {
   constructor(props) {
     super(props);
-    var x = this.props.x || 100;
-    var y = this.props.y || 100;
-    this.state = { x: x, y: y };
+    var x = parseFloat(this.props.x) || 100;
+    var y = parseFloat(this.props.y) || 100;
+    this.state = { x: x, y: y, selected: false };
+    this.handleClick = this.handleClick.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handlehandleMouseUp = this.handleMouseUp.bind(this);
+  }
+
+  handleMouseDown(e) {
+    var screenX = e.screenX,
+      screenY = e.screenY;
+    this.setState(p => ({
+      dragStartX: screenX,
+      dragStartY: screenY,
+      originalX: p.x,
+      originalY: p.y
+    }));
+    dragTarget = this;
+  }
+  handleMouseMove(e) {}
+  handleMouseUp(e) {}
+
+  handleClick(e) {
+    //this.setState(p=>({selected: !p.selected}));
   }
 
   render() {
     return (
       <g>
         <rect
-          onClick={this.handleClick}
           x={this.state.x}
           y={this.state.y}
+          onClick={this.handleClick}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+          onMouseUp={this.handleMouseUp}
           width="130"
           height="100"
           stroke="#aaa"
-          strokeWidth="0.3"
+          strokeWidth={this.state.selected ? "2" : "0.3"}
           strokeOpacity="0.9"
           fill="#ffc"
           fillOpacity="0.8"
-          />
+        />
 
         <AdjustText x={this.state.x} y={this.state.y} text={this.props.text} />
       </g>
@@ -169,14 +193,26 @@ class Fusen extends React.Component {
   }
 }
 
+var dragTarget = null;
+function handleMouseMove(e) {
+  if (e.buttons == 0) return;
+  if (dragTarget == null) return;
+  var dx = e.screenX - dragTarget.state.dragStartX;
+  var dy = e.screenY - dragTarget.state.dragStartY;
+  dragTarget.setState(p => ({
+    x: p.originalX + dx,
+    y: p.originalY + dy
+  }));
+  e.preventDefault();
+}
 ReactDOM.render(
-  <svg width="1440" height="960">
+  <svg width="1440" height="960" onMouseMove={handleMouseMove}>
     <rect width="1440" height="960" fill="#eee" />
     <Fusen
       x="100"
       y="100"
       text="「付箋を共有して共同編集」は技術的にはできるけど重視してない"
-      />
+    />
     <Fusen x="100" y="200" text="付箋を共有して共同編集" />
     <Fusen x="100" y="300" text="付箋を共有" />
     <Fusen x="100" y="400" text="付箋" />
