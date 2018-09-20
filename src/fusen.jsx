@@ -1,6 +1,3 @@
-"use strict";
-
-const e = React.createElement;
 const FUSEN_WIDTH = 130;
 const FUSEN_HEIGHT = 100;
 const DEFAULT_FONT_SIZE = 16;
@@ -138,7 +135,7 @@ class AdjustText extends React.Component {
   }
 }
 
-class Fusen extends React.Component {
+export class Fusen extends React.Component {
   constructor(props) {
     super(props);
     var x = parseFloat(this.props.x) || 100;
@@ -194,7 +191,7 @@ class Fusen extends React.Component {
 }
 
 var dragTarget = null;
-function handleMouseMove(e) {
+export function handleMouseMove(e) {
   if (e.buttons == 0) return;
   if (dragTarget == null) return;
   var dx = e.screenX - dragTarget.state.dragStartX;
@@ -205,18 +202,4 @@ function handleMouseMove(e) {
   }));
   e.preventDefault();
 }
-ReactDOM.render(
-  <svg width="1440" height="960" onMouseMove={handleMouseMove}>
-    <rect width="1440" height="960" fill="#eee" />
-    <Fusen
-      x="100"
-      y="100"
-      text="「付箋を共有して共同編集」は技術的にはできるけど重視してない"
-    />
-    <Fusen x="100" y="200" text="付箋を共有して共同編集" />
-    <Fusen x="100" y="300" text="付箋を共有" />
-    <Fusen x="100" y="400" text="付箋" />
-  </svg>,
-  document.getElementById("canvas")
-);
-console.log("OK");
+
