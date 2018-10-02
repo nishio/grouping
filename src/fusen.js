@@ -93,7 +93,6 @@ class AdjustText extends React.Component {
   }
 
   render_lines(text_x) {
-    console.log(this.state.fontsize);
     var full_height = this.state.fontsize * this.state.lines.length;
     var initial_dy = -full_height / 2 + this.state.fontsize * 0.9;
 
@@ -144,22 +143,47 @@ export class Fusen extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.handlehandleMouseUp = this.handleMouseUp.bind(this);
-  }
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+  };
+
 
   handleMouseDown(e) {
-    var screenX = e.screenX,
-      screenY = e.screenY;
-    this.setState(p => ({
-      dragStartX: screenX,
-      dragStartY: screenY,
-      originalX: p.x,
-      originalY: p.y
-    }));
-    dragTarget = this;
+      this.coords = {
+	  x: e.pageX,
+	  y: e.pageY
+      }
+      document.addEventListener('mousemove', this.handleMouseMove);
+      /*
+      var screenX = e.screenX,
+	  screenY = e.screenY;
+      this.setState(p => ({
+		  dragStartX: screenX,
+		  dragStartY: screenY,
+		  originalX: p.x,
+		  originalY: p.y
+	      }));
+      dragTarget = this;
+      */
+  };
+
+  handleMouseMove(e) {
+      const xDiff = this.coords.x - e.pageX;
+      const yDiff = this.coords.y - e.pageY;
+      const zoom = parseFloat($("#canvas").css("zoom"));
+      this.coords.x = e.pageX;
+      this.coords.y = e.pageY;
+      
+      this.setState({
+	      x: this.state.x - xDiff / zoom,
+	      y: this.state.y - yDiff / zoom
+		  });
   }
-  handleMouseMove(e) {}
-  handleMouseUp(e) {}
+
+  handleMouseUp(e) {
+      document.removeEventListener('mousemove', this.handleMouseMove);
+      this.coords = {};
+  }
+
 
   handleClick(e) {
     //this.setState(p=>({selected: !p.selected}));
@@ -173,7 +197,6 @@ export class Fusen extends React.Component {
           y={this.state.y}
           onClick={this.handleClick}
           onMouseDown={this.handleMouseDown}
-          onMouseMove={this.handleMouseMove}
           onMouseUp={this.handleMouseUp}
           width="130"
           height="100"
@@ -189,17 +212,3 @@ export class Fusen extends React.Component {
     );
   }
 }
-
-var dragTarget = null;
-export function handleMouseMove(e) {
-  if (e.buttons == 0) return;
-  if (dragTarget == null) return;
-  var dx = e.screenX - dragTarget.state.dragStartX;
-  var dy = e.screenY - dragTarget.state.dragStartY;
-  dragTarget.setState(p => ({
-    x: p.originalX + dx,
-    y: p.originalY + dy
-  }));
-  e.preventDefault();
-}
-
