@@ -1,5 +1,5 @@
 "use strict";
-import {Fusen, handleMouseMove} from './fusen.js';
+import {Fusen} from './fusen.js';
 import {sample_data} from './sample_data.js';
 
 const e = React.createElement;
@@ -52,7 +52,7 @@ function Fusens(){
 }
 
 ReactDOM.render(
-  <svg width="100%" height="100%" onMouseMove={handleMouseMove}>
+  <svg width="100%" height="100%">
     <rect width="100%" height="100%" fill="#eee" />
     <Fusens />    
   </svg>,
