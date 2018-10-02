@@ -6,7 +6,7 @@ const dist = path.resolve(__dirname, 'dist');
 
 module.exports = {
     mode: 'development',
-    entry: src + '/index.jsx',
+    entry: src + '/index.js',
 
     output: {
 	path: dist,
@@ -16,7 +16,7 @@ module.exports = {
     module: {
 	rules: [
 {
-    test: /\.jsx$/,
+    test: /\.js$/,
     exclude: /node_modules/,
     loader: 'babel-loader'
 }
