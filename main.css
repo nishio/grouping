@@ -1,6 +1,14 @@
-
 #canvas {
   height: 400vh;
   width: 400vw;
   zoom: 0.25;
+}
+
+svg text {
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
