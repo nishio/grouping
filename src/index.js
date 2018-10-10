@@ -44,11 +44,13 @@ function Fusens_old(){
     <Fusen x="100" y="300" text="付箋を共有" />
     <Fusen x="100" y="400" text="付箋" />
 </>
-);
-}
+)};
 
 function Fusens(){
-  return sample_data.map((obj) => <Fusen x={obj.x} y={obj.y} text={obj.text} />);
+  return <g id="fusen-container">
+      {sample_data.map((obj) => <Fusen x={obj.x+800} y={obj.y+600} text={obj.text} />)}
+  <g id="last-fusen" />
+  </g>;
 }
 
 ReactDOM.render(

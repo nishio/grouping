@@ -153,17 +153,7 @@ export class Fusen extends React.Component {
 	  y: e.pageY
       }
       document.addEventListener('mousemove', this.handleMouseMove);
-      /*
-      var screenX = e.screenX,
-	  screenY = e.screenY;
-      this.setState(p => ({
-		  dragStartX: screenX,
-		  dragStartY: screenY,
-		  originalX: p.x,
-		  originalY: p.y
-	      }));
-      dragTarget = this;
-      */
+      document.addEventListener('touchmove', this.handleMouseMove);
   };
 
   handleMouseMove(e) {
