@@ -199,6 +199,8 @@ export class Fusen extends React.Component {
           onClick={this.handleClick}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
+          onTouchStart={this.handleMouseDown}
+          onTouchEnd={this.handleMouseUp}
           width="130"
           height="100"
           stroke="#aaa"
