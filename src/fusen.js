@@ -157,6 +157,17 @@ export class Fusen extends React.Component {
   };
 
   handleMouseMove(e) {
+      if(e.touches){
+	  if (e.touches.length > 1) {
+	      return;
+	  }
+	  if(e.touches[0].touchType == "stylus"){
+	      e.preventDefault();
+	  }else{
+	      return;
+	  }
+      }
+
       const xDiff = this.coords.x - e.pageX;
       const yDiff = this.coords.y - e.pageY;
       const zoom = parseFloat($("#canvas").css("zoom"));
